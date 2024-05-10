@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 import { PointerManager } from './pointers';
 import './style.css';
 
-const pb = new PocketBase('http://145.97.164.133:8090');
+const pb = new PocketBase('http://127.0.0.1:8090');
 const pm = new PointerManager('pointers', 'pointer');
 
 function randomColor() {
@@ -18,7 +18,7 @@ async function getMyPointer() {
       pointer = await pb.collection('visitors').getOne(id);
     } catch (error) {
       localStorage.removeItem('myPointerId')
-      return
+      return null
     }
   } else {
     pointer = await pb.collection('visitors').create({
@@ -31,7 +31,7 @@ async function getMyPointer() {
 
 // use persisted pointer or create a new one
 const myPointer = await getMyPointer();
-console.log('pointer id:', myPointer.id);
+console.log('pointer id:', myPointer?.id);
 
 // create pointers for all connected clients (including this one)
 const allPointers = await pb.collection('visitors').getFullList()
@@ -42,6 +42,10 @@ allPointers.forEach(pointer => {
 
 // register listener to provide updates to other clients
 window.addEventListener('mousemove', (e) => {
+  if(myPointer === null) {
+    return;
+  }
+
   pm.updatePointer(myPointer.id, e.clientX, e.clientY)
   pb.collection('visitors').update(myPointer.id, {
     x: e.clientX,
