@@ -14,7 +14,12 @@ async function getMyPointer() {
   let id = localStorage.getItem('myPointerId');
   let pointer = null;
   if(id !== 'null' && id !== null) {
-    pointer = await pb.collection('visitors').getOne(id);
+    try {
+      pointer = await pb.collection('visitors').getOne(id);
+    } catch (error) {
+      localStorage.removeItem('myPointerId')
+      return
+    }
   } else {
     pointer = await pb.collection('visitors').create({
       color: randomColor()
