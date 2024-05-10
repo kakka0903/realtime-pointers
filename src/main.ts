@@ -31,7 +31,7 @@ console.log('pointer id:', myPointer.id);
 // create pointers for all connected clients (including this one)
 const allPointers = await pb.collection('visitors').getFullList()
 allPointers.forEach(pointer => {
-  pm.addPointer(pointer.id);
+  pm.addPointer(pointer.id, pointer.color);
   pm.updatePointer(pointer.id, pointer.x, pointer.y)
 });
 
@@ -47,7 +47,7 @@ window.addEventListener('mousemove', (e) => {
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {
   if(e.action == 'create') {
-    pm.addPointer(e.record.id);
+    pm.addPointer(e.record.id, e.record.color);
     pm.updatePointer(e.record.id, e.record.x, e.record.y);
   } else if (e.action == 'delete') {
     pm.removePointer(e.record.id);

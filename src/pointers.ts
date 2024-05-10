@@ -18,11 +18,11 @@ export class PointerManager {
     }
   }
 
-  addPointer(id: string) {
+  addPointer(id: string, color: string) {
     const pointer = document.createElement('div');
     pointer.id = id;
     pointer.className = this.pointerClassname
-    pointer.style.backgroundColor = 'red';
+    pointer.style.backgroundColor = color;
     this.containerEl.appendChild(pointer);
   }
 
