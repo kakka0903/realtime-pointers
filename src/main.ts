@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 import { PointerManager } from './pointers';
 import './style.css';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase(import.meta.env.VITE_PB_URL);
 const pm = new PointerManager('pointers', 'pointer');
 
 function randomColor() {
