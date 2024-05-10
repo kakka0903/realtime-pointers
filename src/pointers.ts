@@ -31,7 +31,6 @@ export class PointerManager {
     if(pointer !== null) {
       pointer.style.left = x.toString()+'px';
       pointer.style.top = y.toString()+'px';
-      console.log(x,y)
     }
   }
 
