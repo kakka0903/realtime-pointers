@@ -32,6 +32,8 @@ pb.collection('visitors').subscribe('*', (e) => {
   if(e.action == 'create') {
     pm.addPointer(e.record.id);
     pm.updatePointer(e.record.id, e.record.x, e.record.y);
+  } else if (e.action == 'delete') {
+    pm.removePointer(e.record.id);
   } else {
     pm.updatePointer(e.record.id, e.record.x, e.record.y);
   }
