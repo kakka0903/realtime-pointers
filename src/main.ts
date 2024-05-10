@@ -4,6 +4,7 @@ import './style.css';
 
 const pb = new PocketBase(import.meta.env.VITE_PB_URL);
 const pm = new PointerManager('pointers', 'pointer');
+const updateFreq = Number(import.meta.env.VITE_UPDATE_FREQ)
 
 function randomColor() {
   const colors = ['red', 'blue', 'green', 'orange'];
@@ -67,7 +68,7 @@ window.addEventListener('mousemove',throttle((e) => {
       y: e.clientY
     });
   }
-}, 200))
+}, updateFreq))
 
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {
