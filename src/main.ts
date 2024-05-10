@@ -67,7 +67,7 @@ window.addEventListener('mousemove',throttle((e) => {
       y: e.clientY
     });
   }
-}, 200))
+}, 100))
 
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {

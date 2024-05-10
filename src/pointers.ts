@@ -1,4 +1,6 @@
 
+import { gsap } from 'gsap';
+
 /**
  * Manages creating, destroying and updating pointer HTML elements.
  */
@@ -27,11 +29,11 @@ export class PointerManager {
   }
 
   updatePointer(id: string, x: number, y: number) {
-    const pointer = document.getElementById(id);
-    if(pointer !== null) {
-      pointer.style.left = x.toString()+'px';
-      pointer.style.top = y.toString()+'px';
-    }
+    gsap.to(`#${id}`, {
+      left: x,
+      top: y,
+      ease: 'back.out'
+    })
   }
 
   removePointer(id: string) {
