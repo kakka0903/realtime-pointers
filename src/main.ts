@@ -5,31 +5,29 @@ import './style.css';
 const pb = new PocketBase('http://127.0.0.1:8090');
 const pm = new PointerManager('pointers', 'pointer');
 
-const pointerOneId = 'djnqneemu70fbwp';
-const pointerTwoId = 'fh8eph2o9m6ewrq';
-let myPointerId = '';
+// create a pointer record for this user
+const myPointer = await pb.collection('visitors').create({});
+let myPointerId = myPointer.id;
 
-pm.addPointer(pointerOneId)
-pm.addPointer(pointerTwoId)
-
-document.querySelectorAll('.use-pointer').forEach((element) => {
-  element.addEventListener('click', (e) => {
-    const idx = e.target?.dataset.idx;
-    myPointerId = (idx == 1) ? pointerOneId : pointerTwoId
-  })
+// create pointers for all connected clients (including this one)
+const allPointers = await pb.collection('visitors').getFullList()
+allPointers.forEach(pointer => {
+  pm.addPointer(pointer.id);
+  pm.updatePointer(pointer.id, pointer.x, pointer.y)
 });
 
-pb.collection('visitors').subscribe('*', (e) => {
-  pm.updatePointer(e.record.id, e.record.mice_x, e.record.mice_y);
-})
-
+// register listener to provide updates to other clients
 window.addEventListener('mousemove', (e) => {
   if (myPointerId !== '') {
-    pb.collection('visitors').update(myPointerId, {
-      mice_x: e.clientX,
-      mice_y: e.clientY
-    });
     pm.updatePointer(myPointerId, e.clientX, e.clientY)
-    console.log('updated ' + myPointerId);
+    pb.collection('visitors').update(myPointerId, {
+      x: e.clientX,
+      y: e.clientY
+    });
   }
+})
+
+// subscribe to updates from other clients
+pb.collection('visitors').subscribe('*', (e) => {
+  pm.updatePointer(e.record.id, e.record.x, e.record.y);
 })
