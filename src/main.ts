@@ -5,21 +5,26 @@ import './style.css';
 const pb = new PocketBase('http://145.97.164.133:8090');
 const pm = new PointerManager('pointers', 'pointer');
 
-async function getMyPointer() {
-  let id = localStorage.getItem('myPointerId');
-
-  if(id !== 'null' && id !== null) {
-    // TODO: handle non-existant pointer
-    const pointer = await pb.collection('visitors').getOne(id);
-    return pointer;
-  } else {
-    const pointer = await pb.collection('visitors').create({});
-    localStorage.setItem('myPointerId', pointer.id);
-    return pointer;
-  }
+function randomColor() {
+  const colors = ['red', 'blue', 'green', 'orange'];
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
-// obtain a pointer id
+async function getMyPointer() {
+  let id = localStorage.getItem('myPointerId');
+  let pointer = null;
+  if(id !== 'null' && id !== null) {
+    pointer = await pb.collection('visitors').getOne(id);
+  } else {
+    pointer = await pb.collection('visitors').create({
+      color: randomColor()
+    });
+  }
+  localStorage.setItem('myPointerId', pointer.id);
+  return pointer;
+}
+
+// use persisted pointer or create a new one
 const myPointer = await getMyPointer();
 console.log('pointer id:', myPointer.id);
 
