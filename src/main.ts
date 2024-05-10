@@ -29,5 +29,10 @@ window.addEventListener('mousemove', (e) => {
 
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {
-  pm.updatePointer(e.record.id, e.record.x, e.record.y);
+  if(e.action == 'create') {
+    pm.addPointer(e.record.id);
+    pm.updatePointer(e.record.id, e.record.x, e.record.y);
+  } else {
+    pm.updatePointer(e.record.id, e.record.x, e.record.y);
+  }
 })
