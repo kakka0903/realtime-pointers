@@ -48,7 +48,3 @@ pb.collection('visitors').subscribe('*', (e) => {
     pm.updatePointer(e.record.id, e.record.x, e.record.y);
   }
 })
-
-window.addEventListener('beforeunload', () => {
-  pb.collection('visitors').delete(myPointerId)
-})
