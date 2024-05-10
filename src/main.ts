@@ -2,24 +2,26 @@ import PocketBase from 'pocketbase';
 import { PointerManager } from './pointers';
 import './style.css';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('http://145.97.164.133:8090');
 const pm = new PointerManager('pointers', 'pointer');
 
-async function getPointerId() {
+async function getMyPointer() {
   let id = localStorage.getItem('myPointerId');
-  if(id !== 'null' && id !== null) {
-    // TODO: verify record exists on server
-    return id;
-  }
 
-  const myPointer = await pb.collection('visitors').create({});
-  localStorage.setItem('myPointerId', myPointer.id);
-  return myPointer.id
+  if(id !== 'null' && id !== null) {
+    // TODO: handle non-existant pointer
+    const pointer = await pb.collection('visitors').getOne(id);
+    return pointer;
+  } else {
+    const pointer = await pb.collection('visitors').create({});
+    localStorage.setItem('myPointerId', pointer.id);
+    return pointer;
+  }
 }
 
 // obtain a pointer id
-let myPointerId = await getPointerId()
-console.log('pointer id:', myPointerId);
+const myPointer = await getMyPointer();
+console.log('pointer id:', myPointer.id);
 
 // create pointers for all connected clients (including this one)
 const allPointers = await pb.collection('visitors').getFullList()
@@ -30,8 +32,8 @@ allPointers.forEach(pointer => {
 
 // register listener to provide updates to other clients
 window.addEventListener('mousemove', (e) => {
-  pm.updatePointer(myPointerId, e.clientX, e.clientY)
-  pb.collection('visitors').update(myPointerId, {
+  pm.updatePointer(myPointer.id, e.clientX, e.clientY)
+  pb.collection('visitors').update(myPointer.id, {
     x: e.clientX,
     y: e.clientY
   });
