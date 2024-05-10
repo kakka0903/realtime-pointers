@@ -40,18 +40,34 @@ allPointers.forEach(pointer => {
   pm.updatePointer(pointer.id, pointer.x, pointer.y)
 });
 
-// register listener to provide updates to other clients
-window.addEventListener('mousemove', (e) => {
-  if(myPointer === null) {
-    return;
-  }
+export function throttle(callback: (...args: any[]) => void, delay = 1000) {
+  let shouldWait = false;
+  return (...args: any[]) => {
+    if (shouldWait) return;
+    callback(...args);
+    shouldWait = true;
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+}
 
-  pm.updatePointer(myPointer.id, e.clientX, e.clientY)
-  pb.collection('visitors').update(myPointer.id, {
-    x: e.clientX,
-    y: e.clientY
-  });
+// update pointer position locally with no delay
+window.addEventListener('mousemove',(e) => {
+  if(myPointer !== null) {
+    pm.updatePointer(myPointer.id, e.clientX, e.clientY)
+  }
 })
+
+// throttle pointer position updates to server
+window.addEventListener('mousemove',throttle((e) => {
+  if(myPointer !== null) {
+    pb.collection('visitors').update(myPointer.id, {
+      x: e.clientX,
+      y: e.clientY
+    });
+  }
+}, 200))
 
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {
