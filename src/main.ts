@@ -16,6 +16,7 @@ async function getMyPointer() {
   let id = localStorage.getItem('myPointerId');
   let pointer = null;
   if(id !== 'null' && id !== null) {
+    console.log('loading persisted pointer...')
     try {
       pointer = await pb.collection('visitors').getOne(id);
     } catch (error) {
@@ -23,6 +24,7 @@ async function getMyPointer() {
       return null
     }
   } else {
+    console.log('creating a new pointer...')
     pointer = await pb.collection('visitors').create({
       color: randomColor()
     });
@@ -39,6 +41,7 @@ console.log('pointer id:', myPointer?.id);
 const allPointers = await pb.collection('visitors').getFullList()
 allPointers.forEach(pointer => {
   pm.addPointer(pointer.id, pointer.color);
+  console.log('created pointed '+pointer.id)
 });
 
 export function throttle(callback: (...args: any[]) => void, delay = 1000) {
