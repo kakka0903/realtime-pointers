@@ -83,10 +83,10 @@ pb.collection('visitors').subscribe('*', (e) => {
 })
 
 function addCopyUrlListener () {
-  const button = document.getElementById('#copy-url');
-  const copyText = document.getElementById('#copy-text');
-  const copyIcon = document.getElementById('#icon-copy');
-  const copiedIcon = document.getElementById('#icon-copied');
+  const button = document.getElementById('copy-url');
+  const copyText = document.getElementById('copy-text');
+  const copyIcon = document.getElementById('icon-copy');
+  const copiedIcon = document.getElementById('icon-copied');
 
   if (button == null || copyText == null|| copyIcon == null || copiedIcon == null) {
     console.error('could not register listener: missing elements');
