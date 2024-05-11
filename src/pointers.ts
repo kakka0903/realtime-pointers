@@ -44,20 +44,17 @@ export class PointerManager {
     pointer.id = id;
     pointer.className = this.pointerClassname
     pointer.style.backgroundColor = color;
+    pointer.style.opacity = '0';
     this.containerEl.appendChild(pointer);
 
     // initialise the heartbeat function for this pointer
-    const pointerHeartbeat = heartbeat(() => {
+    this.heartbeats.set(id, heartbeat(() => {
       gsap.to(`#${id}`, {
         opacity: 0,
         ease: 'slow',
         duration: 10
       })
-    }, 2000)
-
-    // trigger and store for later
-    pointerHeartbeat();
-    this.heartbeats.set(id, pointerHeartbeat);
+    }, 2000));
   }
 
   updatePointer(id: string, x: number, y: number) {

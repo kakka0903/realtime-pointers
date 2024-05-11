@@ -38,7 +38,6 @@ console.log('pointer id:', myPointer?.id);
 const allPointers = await pb.collection('visitors').getFullList()
 allPointers.forEach(pointer => {
   pm.addPointer(pointer.id, pointer.color);
-  pm.updatePointer(pointer.id, pointer.x, pointer.y)
 });
 
 export function throttle(callback: (...args: any[]) => void, delay = 1000) {
