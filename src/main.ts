@@ -73,6 +73,15 @@ window.addEventListener('mousemove',throttle((e) => {
   }
 }, updateFreq))
 
+window.addEventListener('touchstart',throttle((e) => {
+  if(myPointer !== null) {
+    pb.collection('visitors').update(myPointer.id, {
+      x: e.clientX,
+      y: e.clientY
+    });
+  }
+}, updateFreq))
+
 // subscribe to updates from other clients
 pb.collection('visitors').subscribe('*', (e) => {
   if(e.action == 'create') {
