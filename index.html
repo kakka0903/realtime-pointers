@@ -4,19 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PocketBase Realtime Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <details id="info" open>
-      <summary>
-        <h1 style="display: inline;">realtime-pointers</h1>
-      </summary>
+  <body class="bg-gray-100">
+    <div id="info" class="max-w-sm bg-white rounded-lg p-4 shadow-sm border py-4 m-4">
 
-      <p>
+      <h1 class="inline font-medium text-gray-800">Realtime pointers</h1>
+
+      <p class="text-sm text-gray-600 mt-2">
         This application uses Server-Send Events (SSE) to enable realtime
-        pointer visualisation. See it in action by opening the page on another
+        pointer visualisation. See it in action by opening this page on another
         device.
       </p>
-    </details>
+
+    </div>
     <div id="pointers"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
