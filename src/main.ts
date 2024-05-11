@@ -5,6 +5,7 @@ import './style.css';
 const pb = new PocketBase(import.meta.env.VITE_PB_URL);
 const pm = new PointerManager('pointers', 'pointer');
 const updateFreq = Number(import.meta.env.VITE_UPDATE_FREQ)
+const publicURL = import.meta.env.VITE_PUBLIC_URL;
 
 function randomColor() {
   const colors = ['red', 'blue', 'green', 'orange'];
@@ -80,3 +81,31 @@ pb.collection('visitors').subscribe('*', (e) => {
     pm.updatePointer(e.record.id, e.record.x, e.record.y);
   }
 })
+
+function addCopyUrlListener () {
+  const button = document.querySelector('#copy-url');
+  const copyText = document.querySelector('#copy-text');
+  const copyIcon = document.querySelector('#icon-copy');
+  const copiedIcon = document.querySelector('#icon-copied');
+
+  if (button == null || copyText == null|| copyIcon == null || copiedIcon == null) {
+    console.error('could not register listener: missing elements');
+    return;
+  }
+
+  button?.addEventListener('click', () => {
+    navigator.clipboard.writeText(publicURL);
+
+    copyIcon.style.display = 'none';
+    copiedIcon.style.display = 'block';
+    copyText.innerHTML = 'Copied!'
+
+    setTimeout(() => {
+      copyIcon.style.display = 'block';
+      copiedIcon.style.display = 'none';
+      copyText.innerHTML = 'Copy URL'
+    }, 2000)
+  })
+}
+
+addCopyUrlListener();
