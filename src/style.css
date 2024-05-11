@@ -23,3 +23,33 @@
   background-color: gray;
   pointer-events: none;
 }
+
+#info {
+  position: fixed;
+
+  top: 10px;
+  left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  max-width: 320px;
+
+  border-radius: 6px;
+  border: 1px solid rgba(1,1,1, 0.6);
+
+  font-family: sans-serif;
+  font-size: 14px;
+
+  h1 {
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0px;
+    margin-left: 4px;
+    margin-top: 10px;
+  }
+
+  > p {
+    display: block;
+    margin: 0px;
+    margin-top: 10px;
+  }
+}
