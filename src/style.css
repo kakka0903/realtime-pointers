@@ -19,6 +19,7 @@
   width: 10px;
   height: 10px;
   position: fixed;
+  border-radius: 10px;
   background-color: gray;
   pointer-events: none;
 }
